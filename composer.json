@@ -1,5 +1,5 @@
 {
-    "name": "phelix/LoanAmortization",
+    "name": "phelix/loan-amortization",
     "description": "Comprehensive Loan amortization computation package for amortization schedules and interest rates",
     "keywords": ["phelix", "loan-calculator", "amortization"],
     "license": "Apache-2.0",

@@ -43,20 +43,20 @@ months.
 Installation
 ============
 
-    composer require phelix/LoanAmortization
+    composer require phelix/loan-amortization
 
 How To test
 ===========
 
-the test is more of a visualization tool than an actual test.
+The test is more of a visualization tool than an actual test.
 
     vendor/bin/phpunit test
 
 
 # Documentation
 
-for more details on amortization, check [Loan Amortization](https://www.extension.iastate.edu/agdm/wholefarm/html/c5-93.html)
-
+As you go through the sample code samples, please note that anywhere with periods, the period types can take any of the 
+values: **days**, **weeks**, **months** and **years** . Everything in lower case and plural.
 
 ## 1. Flat Interest Rate
 
@@ -77,7 +77,7 @@ Loan Details:
     $interestCalculator
                 ->setPrincipal(50000)
                 ->setInterestRate(12, "yearly", ScheduleGenerator::FLAT_INTEREST) // note the interest type
-                ->setLoanDuration(1, "weeks")
+                ->setLoanDuration(1, "weeks") // could be "years" to have it in years or "months" to have it in months
                 ->setRepayment(1,2, "days")
                 ->generate();
     
