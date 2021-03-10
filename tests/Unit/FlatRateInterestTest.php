@@ -30,8 +30,8 @@ class ScheduleGeneratorTest extends TestCase {
             ->interestCalculator
             ->setPrincipal(10000)
             ->setInterestRate(7, "yearly", ScheduleGenerator::FLAT_INTEREST)
-            ->setLoanDuration(8, "months")
-            ->setRepayment(1,2, "months")
+            ->setLoanDuration(7, "weeks")
+            ->setRepayment(3,1, "weeks")
             ->generate();
 
         print "\nInterest = {$this->interestCalculator->interest} \n";
@@ -47,7 +47,7 @@ class ScheduleGeneratorTest extends TestCase {
         print_r($this->interestCalculator->amortization_schedule);
     }
 
-    public function testFlatInterestRateWithGraceOnInterest() {
+    public function _testFlatInterestRateWithGraceOnInterest() {
 
         $this
             ->interestCalculator
@@ -71,7 +71,7 @@ class ScheduleGeneratorTest extends TestCase {
         print_r($this->interestCalculator->amortization_schedule);
     }
 
-    public function testFlatInterestRateWithGraceOnPrincipalRepayment() {
+    public function _testFlatInterestRateWithGraceOnPrincipalRepayment() {
 
         $this
             ->interestCalculator
@@ -95,7 +95,7 @@ class ScheduleGeneratorTest extends TestCase {
         print_r($this->interestCalculator->amortization_schedule);
     }
 
-    public function testEvenPrincipalOnReducingBalance() {
+    public function _testEvenPrincipalOnReducingBalance() {
 
         $this
             ->interestCalculator
@@ -119,7 +119,7 @@ class ScheduleGeneratorTest extends TestCase {
         print_r($this->interestCalculator->amortization_schedule);
     }
 
-    public function testEvenPrincipalOnReducingBalanceGraceOnPrincipal() {
+    public function _testEvenPrincipalOnReducingBalanceGraceOnPrincipal() {
 
         $this
             ->interestCalculator
@@ -145,7 +145,7 @@ class ScheduleGeneratorTest extends TestCase {
         print_r($this->interestCalculator->amortization_schedule);
     }
 
-    public function testEvenPrincipalOnReducingBalanceGraceOnInterest() {
+    public function _testEvenPrincipalOnReducingBalanceGraceOnInterest() {
 
         $this
             ->interestCalculator
@@ -170,9 +170,7 @@ class ScheduleGeneratorTest extends TestCase {
         print_r($this->interestCalculator->amortization_schedule);
     }
 
-
-
-    public function testEvenInstallmentOnReducingBalance() {
+    public function _testEvenInstallmentOnReducingBalance() {
 
         $this
             ->interestCalculator
@@ -196,7 +194,7 @@ class ScheduleGeneratorTest extends TestCase {
         print_r($this->interestCalculator->amortization_schedule);
     }
 
-    public function testEvenInstallmentOnReducingBalanceGraceOnInterest() {
+    public function _testEvenInstallmentOnReducingBalanceGraceOnInterest() {
 
         $this
             ->interestCalculator
@@ -221,7 +219,7 @@ class ScheduleGeneratorTest extends TestCase {
         print_r($this->interestCalculator->amortization_schedule);
     }
 
-    public function testEvenInstallmentOnReducingBalanceGraceOnPrincipalRepayment() {
+    public function _testEvenInstallmentOnReducingBalanceGraceOnPrincipalRepayment() {
 
         $this
             ->interestCalculator
@@ -246,7 +244,7 @@ class ScheduleGeneratorTest extends TestCase {
         print_r($this->interestCalculator->amortization_schedule);
     }
 
-    public function testEvenInstallmentOnReducingBalanceGraceOnInterestRepayment() {
+    public function _testEvenInstallmentOnReducingBalanceGraceOnInterestRepayment() {
 
         $this
             ->interestCalculator

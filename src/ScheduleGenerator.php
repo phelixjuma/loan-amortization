@@ -13,6 +13,8 @@ namespace Phelix\LoanAmortization;
 
 
 
+use Carbon\Carbon;
+
 final class ScheduleGenerator extends  Loan {
 
 
@@ -140,6 +142,7 @@ final class ScheduleGenerator extends  Loan {
             $balance -= $principal_repayment;
 
             $this->amortization_schedule[] = [
+                "period_length"         => $periodLength,
                 "principal_repayment" => $principal_repayment,
                 "interest_repayment"  => $interest_repayment,
                 "total_amount_repayment"  => $total_amount_repayment,
@@ -210,6 +213,7 @@ final class ScheduleGenerator extends  Loan {
             $balance -= $principal_repayment;
 
             $this->amortization_schedule[] = [
+                "period_length"         => $periodLength,
                 "principal_repayment" => $principal_repayment,
                 "interest_repayment"  => $interest_repayment,
                 "total_amount_repayment"  => $total_amount_repayment,
@@ -295,6 +299,7 @@ final class ScheduleGenerator extends  Loan {
             $balance -= $principal_repayment;
 
             $this->amortization_schedule[] = [
+                "period_length"         => $periodLength,
                 "principal_repayment" => $principal_repayment,
                 "interest_repayment"  => $interest_repayment,
                 "total_amount_repayment"  => $total_amount_repayment,
@@ -361,33 +366,6 @@ final class ScheduleGenerator extends  Loan {
     }
 
     /**
-     * Generate repayment schedule
-     *
-     * @return $this
-     */
-    public function generate() {
-
-        $this->harmonizeParameters();
-
-        if ($this->interest_type == self::FLAT_INTEREST) {
-            $this->setFlatRateInterestSchedule();
-        } elseif ($this->interest_type == self::INTEREST_ON_REDUCING_BALANCE) {
-
-            if ($this->amortization_type == self::EVEN_PRINCIPAL_REPAYMENT) {
-                $this->setReducingBalanceEvenPrincipalRepaymentSchedule();
-            } elseif($this->amortization_type == self::EVEN_INSTALLMENT_REPAYMENT) {
-                $this->setReducingBalanceEvenInstallmentRepaymentSchedule();
-            }
-        }
-
-
-        // Apply grace on interest and principal
-        $this->applyGraceOnInterestRepayment();
-
-        return $this;
-    }
-
-    /**
      * Apply grace on interest repayment
      * Grace on interest repayment involves deferment of interest repayment to later time.
      *
@@ -414,6 +392,83 @@ final class ScheduleGenerator extends  Loan {
                 $this->amortization_schedule[($noInstallments-($i+1))]['total_amount_repayment'] += $interest;
             }
         }
+        return $this;
+    }
+
+    /**
+     * Add repayment dates to the amortization schedule
+     *
+     * @param null $startDate
+     * @return $this
+     * @throws \Exception
+     */
+    private function addRepaymentDates($startDate = null) {
+
+        $startDate = !is_null($startDate) ? $startDate : date("Y-m-d", time());
+
+        $interval = 0;
+
+        switch ($this->repayment_frequency_type) {
+            // We set the harmonized interest rates and loan duration
+            case 'days':
+                $interval = 1;
+                break;
+            case 'weeks':
+                $interval = 7;
+                break;
+            case 'months':
+                $interval = 30;
+                break;
+            case 'years':
+                $interval = 365;
+                break;
+        }
+
+        $noInstallments = sizeof($this->amortization_schedule);
+
+        $noDaysToAdd = 0;
+        for ($i = 0; $i < $noInstallments; $i ++) {
+            // get the number of days to add
+            if ($i > 0) {
+                $noDaysToAdd += ceil($this->amortization_schedule[$i]['period_length'] * $interval);
+            }
+            // set the repayment date
+            $this->amortization_schedule[$i]['repayment_date'] = Utils::addDaysToDate($startDate, $noDaysToAdd);
+        }
+        return $this;
+    }
+
+    /**
+     * Generate repayment schedule
+     *
+     * @param null $startDate
+     * @return $this
+     */
+    public function generate($startDate = null) {
+
+        $this->harmonizeParameters();
+
+        if ($this->interest_type == self::FLAT_INTEREST) {
+            $this->setFlatRateInterestSchedule();
+        } elseif ($this->interest_type == self::INTEREST_ON_REDUCING_BALANCE) {
+
+            if ($this->amortization_type == self::EVEN_PRINCIPAL_REPAYMENT) {
+                $this->setReducingBalanceEvenPrincipalRepaymentSchedule();
+            } elseif($this->amortization_type == self::EVEN_INSTALLMENT_REPAYMENT) {
+                $this->setReducingBalanceEvenInstallmentRepaymentSchedule();
+            }
+        }
+
+        // Apply grace on interest and principal
+        $this->applyGraceOnInterestRepayment();
+
+        // Apply repayment dates
+        try {
+            $this->addRepaymentDates($startDate);
+        } catch (\Exception $e) {
+            print $e->getMessage();
+        }
+
         return $this;
     }
 }

@@ -233,4 +233,20 @@ final class Utils extends  Loan {
         return (pow((1+$interestRate), $numberOfInstallments) - 1) / ($interestRate * pow((1 + $interestRate), $numberOfInstallments));
     }
 
+    /**
+     * Compute date additions
+     * @param $date
+     * @param $days
+     * @return string
+     * @throws \Exception
+     */
+    public static function addDaysToDate($date, $days) {
+
+        $date = new \DateTime($date);
+
+        $date->add(new \DateInterval("P{$days}D")); // P1D means a period of 1 day
+
+        return $date->format('Y-m-d');
+    }
+
 }
