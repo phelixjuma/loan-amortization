@@ -1,0 +1,26 @@
+{
+    "name": "phelix/LoanAmortization",
+    "description": "Comprehensive Loan amortization computation package for amortization schedules and interest rates",
+    "keywords": ["phelix", "loan-calculator", "amortization"],
+    "license": "Apache-2.0",
+    "authors": [
+        {
+            "name": "Phelix Juma",
+            "email": "jumaphelix@kuzalab.com"
+        }
+    ],
+    "type": "package",
+    "scripts": {
+      "test": "vendor/bin/phpunit"
+    },
+    "require": {
+    },
+    "require-dev": {
+      "phpunit/phpunit": "6.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Phelix\\LoanAmortization\\": "src/"
+        }
+    }
+}

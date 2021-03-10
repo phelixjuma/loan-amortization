@@ -1,0 +1,7 @@
+/vendor/*
+tests/LoadEnv.php
+/.idea/*
+/.idea/workspace.xml
+.DS_Store
+.env
+.phpunit.result.cache
