@@ -93,6 +93,7 @@ final class ScheduleGenerator extends  Loan {
         $totalInterestRepayment = 0;
         $balance = $this->principal;
         $totalPeriodLength = 0;
+        $totalGracedInterest = 0;
 
         // Check grace on interest amount
         $graceOnInterestCharged = $this->graceOnInterestCharged($this->harmonized_duration);
@@ -117,7 +118,7 @@ final class ScheduleGenerator extends  Loan {
 
             } else {
                 $principal_repayment = $this->principal - $totalPrincipalRepayment;
-                $interest_repayment = $this->interest - $totalInterestRepayment;
+                $interest_repayment = ($this->interest - $totalGracedInterest) - $totalInterestRepayment;
                 $total_amount_repayment = $principal_repayment + $interest_repayment;
                 $periodLength = $this->harmonized_duration - $totalPeriodLength;
             }
@@ -129,7 +130,9 @@ final class ScheduleGenerator extends  Loan {
 
                 if( $totalPeriodLength <= $graceOnInterestCharged['grace_on_interest_charged'] ) {
                     // subtract from total interest payment
-                    $this->interest -= $interest_repayment;
+                    //$this->interest -= $interest_repayment;
+                    // Add the grace amount to total graced interest
+                    $totalGracedInterest += $interest_repayment;
                     // we reduce the total payment
                     $total_amount_repayment -= $interest_repayment;
                     // set the interest repayment to zero
@@ -149,6 +152,10 @@ final class ScheduleGenerator extends  Loan {
                 "principal_repayment_balance"   => Utils::format($balance),
             ];
         }
+
+        // We get the net interest
+        $this->interest -= $totalGracedInterest;
+
         return $this;
     }
 
