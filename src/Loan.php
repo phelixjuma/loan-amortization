@@ -122,14 +122,14 @@ class Loan {
      * Eg: If you repay within "2" months, no interest for the first 2 months. (basically means zero interest)
      * @var integer $grace_on_interest_condition_duration
      */
-    protected $grace_on_interest_condition_duration;
+    protected $grace_on_interest_charged_condition_duration;
 
     /**
      * The condition duration type eg days, weeks, months, years
      * Eg: If you repay within 2 "months", no interest for the first 2 months. (basically means zero interest)
      * @var string $grace_on_interest_condition_duration_type
      */
-    protected $grace_on_interest_condition_duration_type;
+    protected $grace_on_interest_charged_condition_duration_type;
 
     /**
      * Represents the number of repayment periods that grace should apply to the interest component of a repayment period.
@@ -264,8 +264,8 @@ class Loan {
      */
     public function setGraceOnInterest($conditionDuration, $conditionDurationType,$graceDuration, $graceDurationType) {
 
-        $this->grace_on_interest_condition_duration = $conditionDuration;
-        $this->grace_on_interest_condition_duration_type = $conditionDurationType;
+        $this->grace_on_interest_charged_condition_duration = $conditionDuration;
+        $this->grace_on_interest_charged_condition_duration_type = $conditionDurationType;
         $this->grace_on_interest_charged = $graceDuration;
         $this->grace_on_interest_charged_type = $graceDurationType;
 

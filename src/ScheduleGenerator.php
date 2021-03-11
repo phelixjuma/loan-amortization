@@ -332,25 +332,25 @@ final class ScheduleGenerator extends  Loan {
 
         if ($this->grace_on_interest_charged !== null) {
 
-            $harmonized_condition_duration = $this->grace_on_interest_condition_duration;
+            $harmonized_condition_duration = $this->grace_on_interest_charged_condition_duration;
             $harmonized_grace_on_interest_charged = $this->grace_on_interest_charged;
 
             switch ($this->repayment_frequency_type) {
                 // We set the harmonized interest rates and loan duration
                 case 'days':
-                    $harmonized_condition_duration = Utils::convertDurationToDays($this->grace_on_interest_condition_duration, $this->grace_on_interest_condition_duration_type);
+                    $harmonized_condition_duration = Utils::convertDurationToDays($this->grace_on_interest_charged_condition_duration, $this->grace_on_interest_charged_condition_duration_type);
                     $harmonized_grace_on_interest_charged = Utils::convertDurationToDays($this->grace_on_interest_charged, $this->grace_on_interest_charged_type);
                     break;
                 case 'weeks':
-                    $harmonized_condition_duration = Utils::convertDurationToWeeks($this->grace_on_interest_condition_duration, $this->grace_on_interest_condition_duration_type);
+                    $harmonized_condition_duration = Utils::convertDurationToWeeks($this->grace_on_interest_charged_condition_duration, $this->grace_on_interest_charged_condition_duration_type);
                     $harmonized_grace_on_interest_charged = Utils::convertDurationToWeeks($this->grace_on_interest_charged, $this->grace_on_interest_charged_type);
                     break;
                 case 'months':
-                    $harmonized_condition_duration = Utils::convertDurationToMonths($this->grace_on_interest_condition_duration, $this->grace_on_interest_condition_duration_type);
+                    $harmonized_condition_duration = Utils::convertDurationToMonths($this->grace_on_interest_charged_condition_duration, $this->grace_on_interest_charged_condition_duration_type);
                     $harmonized_grace_on_interest_charged = Utils::convertDurationToMonths($this->grace_on_interest_charged, $this->grace_on_interest_charged_type);
                     break;
                 case 'years':
-                    $harmonized_condition_duration = Utils::convertDurationToYears($this->grace_on_interest_condition_duration, $this->grace_on_interest_condition_duration_type);
+                    $harmonized_condition_duration = Utils::convertDurationToYears($this->grace_on_interest_charged_condition_duration, $this->grace_on_interest_charged_condition_duration_type);
                     $harmonized_grace_on_interest_charged = Utils::convertDurationToYears($this->grace_on_interest_charged, $this->grace_on_interest_charged_type);
                     break;
             }
