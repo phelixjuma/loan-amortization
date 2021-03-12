@@ -436,9 +436,9 @@ final class ScheduleGenerator extends  Loan {
         $noDaysToAdd = 0;
         for ($i = 0; $i < $noInstallments; $i ++) {
             // get the number of days to add
-            if ($i > 0) {
-                $noDaysToAdd += ceil($this->amortization_schedule[$i]['period_length'] * $interval);
-            }
+
+            $noDaysToAdd += ceil($this->amortization_schedule[$i]['period_length'] * $interval);
+
             // set the repayment date
             $this->amortization_schedule[$i]['repayment_date'] = Utils::addDaysToDate($startDate, $noDaysToAdd);
         }
