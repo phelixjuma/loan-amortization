@@ -156,6 +156,9 @@ final class ScheduleGenerator extends  Loan {
         // We get the net interest
         $this->interest -= $totalGracedInterest;
 
+        // We set total amount
+        $this->amount = $this->interest + $totalPrincipalRepayment;
+
         return $this;
     }
 
