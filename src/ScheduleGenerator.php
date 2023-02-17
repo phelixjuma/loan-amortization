@@ -70,7 +70,11 @@ final class ScheduleGenerator extends  Loan {
     private function calculateFlatRateInterest() {
 
         // calculate the interest
-        $this->interest =  Utils::format($this->principal * ($this->harmonized_interest_rate/100) * $this->no_installments);
+        if ($this->interest_type == self::FLAT_INTEREST) {
+            $this->interest =  Utils::format($this->principal * ($this->harmonized_interest_rate/100) * $this->no_installments);
+        } elseif($this->interest_type == self::ABSOLUTE_INTEREST) {
+            $this->interest = $this->absolute_interest_amount;
+        }
         // get the total loan amount
         $this->amount = Utils::format($this->interest + $this->principal);
         // Get the effective interest rate
@@ -458,7 +462,7 @@ final class ScheduleGenerator extends  Loan {
 
         $this->harmonizeParameters();
 
-        if ($this->interest_type == self::FLAT_INTEREST) {
+        if ($this->interest_type == self::FLAT_INTEREST || $this->interest_type == self::ABSOLUTE_INTEREST) {
             $this->setFlatRateInterestSchedule();
         } elseif ($this->interest_type == self::INTEREST_ON_REDUCING_BALANCE) {
 

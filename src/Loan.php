@@ -18,6 +18,7 @@ class Loan {
     const EVEN_PRINCIPAL_REPAYMENT = 'even_principal_repayment';
     const EVEN_INSTALLMENT_REPAYMENT = 'even_installment_repayment';
     const FLAT_INTEREST = 'flat_interest';
+    const ABSOLUTE_INTEREST = 'absolute_interest';
     const INTEREST_ON_REDUCING_BALANCE = 'reducing_balance_interest';
 
     /**
@@ -76,6 +77,12 @@ class Loan {
      * @var integer $no_installments
      */
     public $no_installments;
+
+    /**
+     * Loan interest value. Used where no percentage is set but just an absolute amount for the interest
+     * @var double $interest_rate
+     */
+    protected $absolute_interest_amount;
 
     /**
      * Loan interest rate (%)
@@ -202,6 +209,19 @@ class Loan {
         $this->interest_rate_per_period = $interestRate;
         $this->interest_rate_frequency_type = $frequencyType;
         $this->interest_type = $type;
+
+        return $this;
+    }
+
+    /**
+     * @param $interestAmount
+     * @return $this
+     */
+    public function setAbsoluteInterest($interestAmount): Loan
+    {
+
+        $this->absolute_interest_amount = $interestAmount;
+        $this->interest_type = self::ABSOLUTE_INTEREST;
 
         return $this;
     }

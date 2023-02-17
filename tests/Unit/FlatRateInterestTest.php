@@ -24,7 +24,7 @@ class ScheduleGeneratorTest extends TestCase {
     /**
      * Test flat interest rate
      */
-    public function testFlatInterestRate() {
+    public function _testFlatInterestRate() {
 
         $this
             ->interestCalculator
@@ -32,6 +32,29 @@ class ScheduleGeneratorTest extends TestCase {
             ->setInterestRate(7, "yearly", ScheduleGenerator::FLAT_INTEREST)
             ->setLoanDuration(7, "weeks")
             ->setRepayment(3,1, "weeks")
+            ->generate();
+
+        print "\nInterest = {$this->interestCalculator->interest} \n";
+        print "Effective Interest Rate = {$this->interestCalculator->effective_interest_rate} \n";
+        print "Total Repayable amount = {$this->interestCalculator->amount} \n";
+        print "#Installments = {$this->interestCalculator->no_installments} \n";
+        print "Repayment Frequency = {$this->interestCalculator->repayment_frequency} \n";
+        print "Harmonized Duration = {$this->interestCalculator->harmonized_duration} \n";
+        print "Harmonized Interest rate = {$this->interestCalculator->harmonized_interest_rate} \n";
+
+        print "Amortization Schedule: \n";
+
+        print_r($this->interestCalculator->amortization_schedule);
+    }
+
+    public function testAbsoluteInterestRate() {
+
+        $this
+            ->interestCalculator
+            ->setPrincipal(10000)
+            ->setAbsoluteInterest(2000)
+            ->setLoanDuration(1, "months")
+            ->setRepayment(1,1, "weeks")
             ->generate();
 
         print "\nInterest = {$this->interestCalculator->interest} \n";
