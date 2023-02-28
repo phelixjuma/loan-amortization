@@ -53,9 +53,10 @@ class ScheduleGeneratorTest extends TestCase {
             ->interestCalculator
             ->setPrincipal(10000)
             ->setAbsoluteInterest(2000)
-            ->setLoanDuration(1, "months")
-            ->setRepayment(1,1, "weeks")
-            ->generate();
+            ->setLoanDuration(3, "years")
+            ->setRepayment(1,1, "years")
+            ->tieInstallmentsToSpecificTimes(null, null, "3-31")
+            ->generate("");
 
         print "\nInterest = {$this->interestCalculator->interest} \n";
         print "Effective Interest Rate = {$this->interestCalculator->effective_interest_rate} \n";

@@ -72,6 +72,33 @@ class Loan {
     public $repayment_frequency;
 
     /**
+     * This puts a restriction so that repayments are done on specific days of the week.
+     * Used to modify the installment dates to restrict them to specific week days.
+     * This only works with weekly repayments.
+     * @var string $repayment_week_days
+     */
+    public $repayment_week_days;
+
+    /**
+     * This puts a restriction so that repayments are done on specific dates of the month.
+     * Used to modify the installment dates to restrict them to specific dates of the month.
+     * This only works with monthly repayments.
+     *
+     * @var numeric $repayment_month_dates
+     */
+    public $repayment_month_dates;
+
+    /**
+     * This puts a restriction so that repayments are done on specific month dates of the year.
+     * Used to modify the installment dates to restrict them to specific month-dates of the year.
+     * This only works with yearly repayments.
+     * Format is "d/m" eg "2/3" is 2nd of March every year.
+     *
+     * @var string $repayment_year_dates
+     */
+    public $repayment_year_dates;
+
+    /**
      * Total number of installments.
      * Dependent on the repayment details above
      * @var integer $no_installments
@@ -261,6 +288,23 @@ class Loan {
     }
 
     /**
+     * Set restrictions on installments to fall within specific times.
+     *
+     * @param $repaymentWeekDays
+     * @param $repaymentMonthDates
+     * @param $repaymentYearDates
+     * @return $this
+     */
+    public function tieInstallmentsToSpecificTimes($repaymentWeekDays=null, $repaymentMonthDates=null, $repaymentYearDates=null) {
+
+        $this->repayment_week_days = $repaymentWeekDays;
+        $this->repayment_month_dates = $repaymentMonthDates;
+        $this->repayment_year_dates = $repaymentYearDates;
+
+        return $this;
+    }
+
+    /**
      * Set amortization type
      * @param $type
      * @return $this
@@ -277,7 +321,6 @@ class Loan {
      *
      * @param $conditionDuration
      * @param $conditionDurationType
-     * @param $graceDurationPosition
      * @param $graceDuration
      * @param $graceDurationType
      * @return $this

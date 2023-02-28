@@ -249,4 +249,99 @@ final class Utils extends  Loan {
         return $date->format('Y-m-d');
     }
 
+    public static function formatDate($date, $format) {
+        $date = new \DateTime($date);
+        return $date->format($format);
+    }
+
+    /**
+     * @param $dayOfTheWeek
+     * @param $count
+     * @param $startDate
+     * @return array
+     * @throws \Exception
+     */
+    public static function getDatesForWeekDays($dayOfTheWeek, $count, $startDate="") {
+
+        if (!empty($startDate)) {
+            $date = new \DateTime($startDate);
+        } else {
+            // Create a new DateTime object
+            $date = new \DateTime();
+            // Modify the date it contains
+            $date->modify("next $dayOfTheWeek");
+        }
+
+        $allDates = [$date->format('Y-m-d')];
+
+        for ($i=1; $i < $count; $i++) {
+            $allDates[] = $date->modify("next $dayOfTheWeek")->format("Y-m-d");
+        }
+        return $allDates;
+    }
+
+    /**
+     * @param $monthDateNumber
+     * @param $count
+     * @param $startDate
+     * @return array
+     * @throws \Exception
+     */
+    public static function getDatesForMonthDates($monthDateNumber, $count, $startDate="") {
+
+        $interval = $monthDateNumber - 1;
+
+        if (!empty($startDate)) {
+            $date = new \DateTime($startDate);
+        } else {
+            // Create a new DateTime object
+            $date = new \DateTime();
+            // Modify the date it contains
+            $date->modify("first day of next month")->add(new \DateInterval("P{$interval}D"));
+        }
+
+        $allDates = [$date->format('Y-m-d')];
+
+        for ($i=1; $i < $count; $i++) {
+            $allDates[] = $date->modify("first day of next month")->add(new \DateInterval("P{$interval}D"))->format("Y-m-d");
+        }
+        return $allDates;
+    }
+
+    /**
+     * @param $monthDate
+     * @param $count
+     * @param $startDate
+     * @return array
+     * @throws \Exception
+     */
+    public static function getDatesForYearDates($monthDate, $count, $startDate="") {
+
+        if (!empty($startDate)) {
+            $date = new \DateTime($startDate);
+            $year = intval($date->format('Y'));
+        } else {
+            // Create a new DateTime object
+            $date = new \DateTime();
+
+            // Modify the date it contains
+            $year = 1 + intval($date->format('Y'));
+
+            $date = new \DateTime("$year-$monthDate");
+        }
+
+        $allDates = [$date->format('Y-m-d')];
+
+        for ($i=1; $i < $count; $i++) {
+
+            // Modify the date it contains
+            $year = 1+ intval($date->format('Y'));
+
+            $date = new \DateTime("$year-$monthDate");
+
+            $allDates[] = $date->format("Y-m-d");
+        }
+        return $allDates;
+    }
+
 }

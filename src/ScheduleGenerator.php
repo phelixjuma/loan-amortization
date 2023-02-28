@@ -12,8 +12,7 @@
 namespace Phelix\LoanAmortization;
 
 
-
-use Carbon\Carbon;
+use SebastianBergmann\CodeCoverage\Util;
 
 final class ScheduleGenerator extends  Loan {
 
@@ -25,6 +24,7 @@ final class ScheduleGenerator extends  Loan {
      * FlatRateInterest constructor.
      */
     public function __construct() {
+        parent::__construct();
     }
 
     /**
@@ -412,13 +412,14 @@ final class ScheduleGenerator extends  Loan {
     /**
      * Add repayment dates to the amortization schedule
      *
-     * @param null $startDate
+     * @param string|null $firstInstallmentDate
      * @return $this
      * @throws \Exception
      */
-    private function addRepaymentDates($startDate = null) {
+    private function addRepaymentDates($firstInstallmentDate = null) {
 
-        $startDate = !is_null($startDate) ? $startDate : date("Y-m-d", time());
+        $firstInstallmentDate = !empty($firstInstallmentDate) ? Utils::formatDate($firstInstallmentDate, "Y-m-d") : null;
+        $startDate = date("Y-m-d", time());
 
         $interval = 0;
 
@@ -440,14 +441,49 @@ final class ScheduleGenerator extends  Loan {
 
         $noInstallments = sizeof($this->amortization_schedule);
 
-        $noDaysToAdd = 0;
-        for ($i = 0; $i < $noInstallments; $i ++) {
-            // get the number of days to add
 
-            $noDaysToAdd += ceil($this->amortization_schedule[$i]['period_length'] * $interval);
+        // Payment is set to specific days of the week, we use that.
+        if ($this->repayment_frequency_type == 'weeks' && !empty($this->repayment_week_days)) {
+            $dates = Utils::getDatesForWeekDays($this->repayment_week_days, $noInstallments, $firstInstallmentDate);
+            for ($i = 0; $i < $noInstallments; $i ++) {
+                // set the repayment date
+                $this->amortization_schedule[$i]['repayment_date'] = $dates[$i];
+            }
+        }
+        // Payment is set to specific dates of the month, we use that.
+        elseif ($this->repayment_frequency_type == 'months' && !empty($this->repayment_month_dates)) {
+            $dates = Utils::getDatesForMonthDates($this->repayment_month_dates, $noInstallments, $firstInstallmentDate);
+            for ($i = 0; $i < $noInstallments; $i ++) {
+                // set the repayment date
+                $this->amortization_schedule[$i]['repayment_date'] = $dates[$i];
+            }
+        }
+        // Payment is set to specific month dates of a year, we use that.
+        elseif ($this->repayment_frequency_type == 'years' && !empty($this->repayment_year_dates)) {
+            $dates = Utils::getDatesForYearDates($this->repayment_year_dates, $noInstallments, $firstInstallmentDate);
+            for ($i = 0; $i < $noInstallments; $i ++) {
+                // set the repayment date
+                $this->amortization_schedule[$i]['repayment_date'] = $dates[$i];
+            }
+        }
+        // No restrictions on specific times are set; we use dates.
+        else {
 
-            // set the repayment date
-            $this->amortization_schedule[$i]['repayment_date'] = Utils::addDaysToDate($startDate, $noDaysToAdd);
+            // We set the first installment date.
+            if (!empty($firstInstallmentDate)) {
+                $this->amortization_schedule[0]['repayment_date'] = $firstInstallmentDate;
+            } else {
+                $this->amortization_schedule[0]['repayment_date'] = Utils::addDaysToDate($startDate, ceil($this->amortization_schedule[0]['period_length'] * $interval));;
+            }
+
+            // We add the remaining dates.
+            for ($i = 1; $i < $noInstallments; $i ++) {
+                // get the number of days to add
+                $noDaysToAdd = ceil($this->amortization_schedule[$i]['period_length'] * $interval);
+                // set the repayment date
+                $this->amortization_schedule[$i]['repayment_date'] = Utils::addDaysToDate($this->amortization_schedule[$i-1]['repayment_date'], $noDaysToAdd);
+            }
+
         }
         return $this;
     }
@@ -455,10 +491,10 @@ final class ScheduleGenerator extends  Loan {
     /**
      * Generate repayment schedule
      *
-     * @param null $startDate
+     * @param string|null $firstInstallmentDate The first installment date.
      * @return $this
      */
-    public function generate($startDate = null) {
+    public function generate($firstInstallmentDate = null) {
 
         $this->harmonizeParameters();
 
@@ -478,7 +514,7 @@ final class ScheduleGenerator extends  Loan {
 
         // Apply repayment dates
         try {
-            $this->addRepaymentDates($startDate);
+            $this->addRepaymentDates($firstInstallmentDate);
         } catch (\Exception $e) {
             print $e->getMessage();
         }
