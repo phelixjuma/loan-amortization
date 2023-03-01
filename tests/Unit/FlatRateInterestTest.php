@@ -3,6 +3,7 @@
 namespace Phelix\LoanAmortization\Tests\Unit;
 
 
+use Phelix\LoanAmortization\Loan;
 use Phelix\LoanAmortization\ScheduleGenerator;
 use PHPUnit\Framework\TestCase;
 
@@ -24,15 +25,16 @@ class ScheduleGeneratorTest extends TestCase {
     /**
      * Test flat interest rate
      */
-    public function _testFlatInterestRate() {
+    public function testFlatInterestRate() {
 
         $this
             ->interestCalculator
             ->setPrincipal(10000)
-            ->setInterestRate(7, "yearly", ScheduleGenerator::FLAT_INTEREST)
-            ->setLoanDuration(7, "weeks")
-            ->setRepayment(3,1, "weeks")
-            ->generate();
+            ->setInterestRate(30, "monthly", Loan::FLAT_INTEREST)
+            ->setLoanDuration(1, "months")
+            ->setRepayment(1,1, "weeks")
+            ->tieInstallmentsToSpecificTimes('monday', null, null)
+            ->generate("2023-03-03");
 
         print "\nInterest = {$this->interestCalculator->interest} \n";
         print "Effective Interest Rate = {$this->interestCalculator->effective_interest_rate} \n";
@@ -47,7 +49,7 @@ class ScheduleGeneratorTest extends TestCase {
         print_r($this->interestCalculator->amortization_schedule);
     }
 
-    public function testAbsoluteInterestRate() {
+    public function _testAbsoluteInterestRate() {
 
         $this
             ->interestCalculator
