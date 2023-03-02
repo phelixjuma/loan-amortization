@@ -444,7 +444,8 @@ final class ScheduleGenerator extends  Loan {
 
         // Payment is set to specific days of the week, we use that.
         if ($this->repayment_frequency_type == 'weeks' && !empty($this->repayment_week_days)) {
-            $dates = Utils::getDatesForWeekDays($this->repayment_week_days, $noInstallments, $firstInstallmentDate);
+
+            $dates = Utils::getDatesForWeekDays($this->repayment_week_days, $noInstallments, $this->repayment_every, $firstInstallmentDate);
             for ($i = 0; $i < $noInstallments; $i ++) {
                 // set the repayment date
                 $this->amortization_schedule[$i]['repayment_date'] = $dates[$i];
@@ -452,7 +453,7 @@ final class ScheduleGenerator extends  Loan {
         }
         // Payment is set to specific dates of the month, we use that.
         elseif ($this->repayment_frequency_type == 'months' && !empty($this->repayment_month_dates)) {
-            $dates = Utils::getDatesForMonthDates($this->repayment_month_dates, $noInstallments, $firstInstallmentDate);
+            $dates = Utils::getDatesForMonthDates($this->repayment_month_dates, $noInstallments, $this->repayment_every, $firstInstallmentDate);
             for ($i = 0; $i < $noInstallments; $i ++) {
                 // set the repayment date
                 $this->amortization_schedule[$i]['repayment_date'] = $dates[$i];

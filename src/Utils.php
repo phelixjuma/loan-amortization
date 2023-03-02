@@ -257,11 +257,14 @@ final class Utils extends  Loan {
     /**
      * @param $dayOfTheWeek
      * @param $count
+     * @param $skipEvery
      * @param $startDate
      * @return array
      * @throws \Exception
      */
-    public static function getDatesForWeekDays($dayOfTheWeek, $count, $startDate="") {
+    public static function getDatesForWeekDays($dayOfTheWeek, $count, $skipEvery=1, $startDate="") {
+
+        $skipEvery -= 1;
 
         if (!empty($startDate)) {
             $date = new \DateTime($startDate);
@@ -274,8 +277,19 @@ final class Utils extends  Loan {
 
         $allDates = [$date->format('Y-m-d')];
 
+        // skip, if set
+        for ($skip = 0; $skip < $skipEvery; $skip++) {
+            $date->modify("next $dayOfTheWeek");
+        }
+
+        // We cater for the skips.
+        $count = $count * $skipEvery;
+
         for ($i=1; $i < $count; $i++) {
             $allDates[] = $date->modify("next $dayOfTheWeek")->format("Y-m-d");
+            for ($skip = 0; $skip < $skipEvery; $skip++) {
+                $date->modify("next $dayOfTheWeek");
+            }
         }
         return $allDates;
     }
@@ -283,13 +297,15 @@ final class Utils extends  Loan {
     /**
      * @param $monthDateNumber
      * @param $count
+     * @param $skipEvery
      * @param $startDate
      * @return array
      * @throws \Exception
      */
-    public static function getDatesForMonthDates($monthDateNumber, $count, $startDate="") {
+    public static function getDatesForMonthDates($monthDateNumber, $count, $skipEvery=1, $startDate="") {
 
         $interval = $monthDateNumber - 1;
+        $skipEvery -= 1;
 
         if (!empty($startDate)) {
             $date = new \DateTime($startDate);
@@ -302,8 +318,19 @@ final class Utils extends  Loan {
 
         $allDates = [$date->format('Y-m-d')];
 
+        // skip, if set
+        for ($skip = 0; $skip < $skipEvery; $skip++) {
+            $date->modify("first day of next month")->add(new \DateInterval("P{$interval}D"));
+        }
+
         for ($i=1; $i < $count; $i++) {
+
             $allDates[] = $date->modify("first day of next month")->add(new \DateInterval("P{$interval}D"))->format("Y-m-d");
+
+            // skip, if set
+            for ($skip = 0; $skip < $skipEvery; $skip++) {
+                $date->modify("first day of next month")->add(new \DateInterval("P{$interval}D"));
+            }
         }
         return $allDates;
     }
@@ -320,6 +347,7 @@ final class Utils extends  Loan {
         if (!empty($startDate)) {
             $date = new \DateTime($startDate);
             $year = intval($date->format('Y'));
+            $date = new \DateTime("$year-$monthDate");
         } else {
             // Create a new DateTime object
             $date = new \DateTime();
