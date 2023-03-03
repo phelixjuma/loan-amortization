@@ -278,12 +278,13 @@ final class Utils extends  Loan {
         $allDates = [$date->format('Y-m-d')];
 
         // skip, if set
-        for ($skip = 0; $skip < $skipEvery; $skip++) {
-            $date->modify("next $dayOfTheWeek");
+        if ($skipEvery > 0) {
+            for ($skip = 0; $skip < $skipEvery; $skip++) {
+                $date->modify("next $dayOfTheWeek");
+            }
+            // We cater for the skips.
+            $count = $count * $skipEvery;
         }
-
-        // We cater for the skips.
-        $count = $count * $skipEvery;
 
         for ($i=1; $i < $count; $i++) {
             $allDates[] = $date->modify("next $dayOfTheWeek")->format("Y-m-d");
@@ -319,8 +320,10 @@ final class Utils extends  Loan {
         $allDates = [$date->format('Y-m-d')];
 
         // skip, if set
-        for ($skip = 0; $skip < $skipEvery; $skip++) {
-            $date->modify("first day of next month")->add(new \DateInterval("P{$interval}D"));
+        if ($skipEvery > 0) {
+            for ($skip = 0; $skip < $skipEvery; $skip++) {
+                $date->modify("first day of next month")->add(new \DateInterval("P{$interval}D"));
+            }
         }
 
         for ($i=1; $i < $count; $i++) {
@@ -328,8 +331,10 @@ final class Utils extends  Loan {
             $allDates[] = $date->modify("first day of next month")->add(new \DateInterval("P{$interval}D"))->format("Y-m-d");
 
             // skip, if set
-            for ($skip = 0; $skip < $skipEvery; $skip++) {
-                $date->modify("first day of next month")->add(new \DateInterval("P{$interval}D"));
+            if ($skipEvery > 0) {
+                for ($skip = 0; $skip < $skipEvery; $skip++) {
+                    $date->modify("first day of next month")->add(new \DateInterval("P{$interval}D"));
+                }
             }
         }
         return $allDates;
