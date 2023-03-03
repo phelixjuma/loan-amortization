@@ -29,11 +29,11 @@ class ScheduleGeneratorTest extends TestCase {
 
         $this
             ->interestCalculator
-            ->setPrincipal(10000)
-            ->setInterestRate(30, "monthly", Loan::FLAT_INTEREST)
-            ->setLoanDuration(1, "years")
-            ->setRepayment(1,2, "months")
-            ->tieInstallmentsToSpecificTimes(null, 1, null)
+            ->setPrincipal(2501)
+            ->setInterestRate(2.7, "daily", Loan::FLAT_INTEREST)
+            ->setLoanDuration(1, "weeks")
+            ->setRepayment(1,1, "days")
+            ->tieInstallmentsToSpecificTimes(null, null, null)
             ->generate("");
 
         print "\nInterest = {$this->interestCalculator->interest} \n";
