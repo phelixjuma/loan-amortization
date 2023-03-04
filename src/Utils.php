@@ -215,8 +215,12 @@ final class Utils extends  Loan {
      * @param $value
      * @return float
      */
-    public static function format($value) {
-        return ceil($value);
+    public static function format($value, $ceil=false) {
+        if ($ceil === true) {
+            return ceil($value);
+        } else {
+            return round($value,2);
+        }
     }
 
     /**

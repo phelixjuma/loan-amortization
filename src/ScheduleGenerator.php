@@ -75,6 +75,7 @@ final class ScheduleGenerator extends  Loan {
         } elseif($this->interest_type == self::ABSOLUTE_INTEREST) {
             $this->interest = $this->absolute_interest_amount;
         }
+
         // get the total loan amount
         $this->amount = Utils::format($this->interest + $this->principal);
         // Get the effective interest rate
@@ -106,18 +107,18 @@ final class ScheduleGenerator extends  Loan {
 
             if ($i != $total_installments ) {
 
-                $interest_repayment = Utils::format($this->interest * ((1/$this->repayment_frequency)/$this->harmonized_duration));
-                $principal_repayment = Utils::format($this->principal * ((1/$this->repayment_frequency)/$this->harmonized_duration));
+                $interest_repayment = Utils::format($this->interest * ((1/$this->repayment_frequency)/$this->harmonized_duration), true);
+                $principal_repayment = Utils::format($this->principal * ((1/$this->repayment_frequency)/$this->harmonized_duration), true);
 
                 // Apply grace on principal repayments
                 if ($this->grace_on_principal_repayment !== null && $this->grace_on_principal_repayment <= ($total_installments/2)) {
                     if ($i <= $this->grace_on_principal_repayment) {
                         $principal_repayment = 0;
                     } else {
-                        $principal_repayment = Utils::format( ((1/$this->repayment_frequency)/($this->harmonized_duration - ($this->grace_on_principal_repayment*(1/$this->repayment_frequency)))) * $this->principal);
+                        $principal_repayment = Utils::format( ((1/$this->repayment_frequency)/($this->harmonized_duration - ($this->grace_on_principal_repayment*(1/$this->repayment_frequency)))) * $this->principal, true);
                     }
                 }
-                $total_amount_repayment = Utils::format($principal_repayment + $interest_repayment);
+                $total_amount_repayment = Utils::format($principal_repayment + $interest_repayment, true);
                 $periodLength = 1/$this->repayment_frequency;
 
             } else {
@@ -153,7 +154,7 @@ final class ScheduleGenerator extends  Loan {
                 "principal_repayment" => $principal_repayment,
                 "interest_repayment"  => $interest_repayment,
                 "total_amount_repayment"  => $total_amount_repayment,
-                "principal_repayment_balance"   => Utils::format($balance),
+                "principal_repayment_balance"   => Utils::format($balance, true),
             ];
         }
 
@@ -186,21 +187,21 @@ final class ScheduleGenerator extends  Loan {
 
         for ($i = 1; $i <= $total_installments; $i++) {
 
-            $interest_repayment = Utils::format(($this->harmonized_interest_rate/100) * $balance);
+            $interest_repayment = Utils::format(($this->harmonized_interest_rate/100) * $balance, true);
             if ($i != $total_installments) {
 
-                $principal_repayment = Utils::format( ((1/$this->repayment_frequency) / $this->harmonized_duration) * $this->principal);
+                $principal_repayment = Utils::format( ((1/$this->repayment_frequency) / $this->harmonized_duration) * $this->principal, true);
 
                 // Apply grace on principal repayments
                 if ($this->grace_on_principal_repayment !== null && $this->grace_on_principal_repayment <= ($total_installments/2)) {
                     if ($i <= $this->grace_on_principal_repayment) {
                         $principal_repayment = 0;
                     } else {
-                        $principal_repayment = Utils::format( ((1/$this->repayment_frequency) / ($this->harmonized_duration - ($this->grace_on_principal_repayment*(1/$this->repayment_frequency)))) * $this->principal);
+                        $principal_repayment = Utils::format( ((1/$this->repayment_frequency) / ($this->harmonized_duration - ($this->grace_on_principal_repayment*(1/$this->repayment_frequency)))) * $this->principal, true);
                     }
                 }
 
-                $total_amount_repayment = Utils::format($principal_repayment + $interest_repayment);
+                $total_amount_repayment = Utils::format($principal_repayment + $interest_repayment, true);
                 $periodLength = 1/$this->repayment_frequency;
 
             } else {
@@ -231,7 +232,7 @@ final class ScheduleGenerator extends  Loan {
                 "principal_repayment" => $principal_repayment,
                 "interest_repayment"  => $interest_repayment,
                 "total_amount_repayment"  => $total_amount_repayment,
-                "principal_repayment_balance"   => Utils::format($balance),
+                "principal_repayment_balance"   => Utils::format($balance, true),
             ];
         }
 
@@ -269,10 +270,10 @@ final class ScheduleGenerator extends  Loan {
         for ($i = 1; $i <= $total_installments; $i++) {
 
             // calculate the total amount to be repaid in each period
-            $total_amount_repayment = Utils::format($this->principal / Utils::discountingFactor($this->harmonized_interest_rate, $total_installments));
+            $total_amount_repayment = Utils::format($this->principal / Utils::discountingFactor($this->harmonized_interest_rate, $total_installments), true);
 
             // Calculate interest repayment
-            $interest_repayment = Utils::format(($this->harmonized_interest_rate/100) * $balance);
+            $interest_repayment = Utils::format(($this->harmonized_interest_rate/100) * $balance, true);
 
             if ($i != $total_installments) {
 
@@ -284,7 +285,7 @@ final class ScheduleGenerator extends  Loan {
                         $total_amount_repayment -= $principal_repayment;
                         $principal_repayment = 0;
                     } else {
-                        $total_amount_repayment = Utils::format($this->principal / Utils::discountingFactor($this->harmonized_interest_rate, ($total_installments - $this->grace_on_principal_repayment)));
+                        $total_amount_repayment = Utils::format($this->principal / Utils::discountingFactor($this->harmonized_interest_rate, ($total_installments - $this->grace_on_principal_repayment)), true);
                     }
                 }
 
@@ -317,7 +318,7 @@ final class ScheduleGenerator extends  Loan {
                 "principal_repayment" => $principal_repayment,
                 "interest_repayment"  => $interest_repayment,
                 "total_amount_repayment"  => $total_amount_repayment,
-                "principal_repayment_balance"   => Utils::format($balance),
+                "principal_repayment_balance"   => Utils::format($balance, true),
             ];
         }
 
