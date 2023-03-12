@@ -518,7 +518,7 @@ final class ScheduleGenerator extends  Loan {
         try {
             $this->addRepaymentDates($firstInstallmentDate);
         } catch (\Exception $e) {
-            print $e->getMessage();
+            //print $e->getMessage();
         }
 
         return $this;
