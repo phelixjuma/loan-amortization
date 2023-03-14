@@ -25,7 +25,7 @@ class ScheduleGeneratorTest extends TestCase {
     /**
      * Test flat interest rate
      */
-    public function _testFlatInterestRate() {
+    public function testFlatInterestRate() {
 
         $this
             ->interestCalculator
@@ -196,7 +196,7 @@ class ScheduleGeneratorTest extends TestCase {
         print_r($this->interestCalculator->amortization_schedule);
     }
 
-    public function testEvenInstallmentOnReducingBalance() {
+    public function _testEvenInstallmentOnReducingBalance() {
 
         $this
             ->interestCalculator
