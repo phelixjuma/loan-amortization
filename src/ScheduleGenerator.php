@@ -35,22 +35,25 @@ final class ScheduleGenerator extends  Loan {
      */
     private function harmonizeParameters() {
 
+        // harmonize interest rate
+        $this->harmonized_interest_rate = Utils::getTotalInterestRate($this->interest_rate_per_period, $this->interest_rate_frequency_type, $this->loan_term_duration, $this->loan_term_duration_type);
+
         switch ($this->repayment_frequency_type) {
             // We set the harmonized interest rates and loan duration
             case 'days':
-                $this->harmonized_interest_rate = Utils::getDailyInterestRate($this->interest_rate_per_period, $this->interest_rate_frequency_type, $this->repayment_frequency);
+                //$this->harmonized_interest_rate = Utils::getDailyInterestRate($this->interest_rate_per_period, $this->interest_rate_frequency_type, $this->repayment_frequency);
                 $this->harmonized_duration = Utils::convertDurationToDays($this->loan_term_duration, $this->loan_term_duration_type);
                 break;
             case 'weeks':
-                $this->harmonized_interest_rate = Utils::getWeeklyInterestRate($this->interest_rate_per_period, $this->interest_rate_frequency_type, $this->repayment_frequency);
+                //$this->harmonized_interest_rate = Utils::getWeeklyInterestRate($this->interest_rate_per_period, $this->interest_rate_frequency_type, $this->repayment_frequency);
                 $this->harmonized_duration = Utils::convertDurationToWeeks($this->loan_term_duration, $this->loan_term_duration_type);
                 break;
             case 'months':
-                $this->harmonized_interest_rate = Utils::getMonthlyInterestRate($this->interest_rate_per_period, $this->interest_rate_frequency_type, $this->repayment_frequency);
+                //$this->harmonized_interest_rate = Utils::getMonthlyInterestRate($this->interest_rate_per_period, $this->interest_rate_frequency_type, $this->repayment_frequency);
                 $this->harmonized_duration = Utils::convertDurationToMonths($this->loan_term_duration, $this->loan_term_duration_type);
                 break;
             case 'years':
-                $this->harmonized_interest_rate = Utils::getYearlyInterestRate($this->interest_rate_per_period, $this->interest_rate_frequency_type, $this->repayment_frequency);
+                //$this->harmonized_interest_rate = Utils::getYearlyInterestRate($this->interest_rate_per_period, $this->interest_rate_frequency_type, $this->repayment_frequency);
                 $this->harmonized_duration = Utils::convertDurationToYears($this->loan_term_duration, $this->loan_term_duration_type);
                 break;
         }
@@ -71,7 +74,8 @@ final class ScheduleGenerator extends  Loan {
 
         // calculate the interest
         if ($this->interest_type == self::FLAT_INTEREST) {
-            $this->interest =  Utils::format($this->principal * ($this->harmonized_interest_rate/100) * $this->no_installments);
+            //$this->interest =  Utils::format($this->principal * ($this->harmonized_interest_rate/100) * $this->no_installments);
+            $this->interest =  Utils::format($this->principal * ($this->harmonized_interest_rate/100));
         } elseif($this->interest_type == self::ABSOLUTE_INTEREST) {
             $this->interest = $this->absolute_interest_amount;
         }
@@ -187,7 +191,7 @@ final class ScheduleGenerator extends  Loan {
 
         for ($i = 1; $i <= $total_installments; $i++) {
 
-            $interest_repayment = Utils::format(($this->harmonized_interest_rate/100) * $balance, true);
+            $interest_repayment = Utils::format(($this->harmonized_interest_rate/$total_installments/100) * $balance, true);
             if ($i != $total_installments) {
 
                 $principal_repayment = Utils::format( ((1/$this->repayment_frequency) / $this->harmonized_duration) * $this->principal, true);
@@ -270,10 +274,10 @@ final class ScheduleGenerator extends  Loan {
         for ($i = 1; $i <= $total_installments; $i++) {
 
             // calculate the total amount to be repaid in each period
-            $total_amount_repayment = Utils::format($this->principal / Utils::discountingFactor($this->harmonized_interest_rate, $total_installments), true);
+            $total_amount_repayment = Utils::format($this->principal / Utils::discountingFactor($this->harmonized_interest_rate/$total_installments, $total_installments), true);
 
             // Calculate interest repayment
-            $interest_repayment = Utils::format(($this->harmonized_interest_rate/100) * $balance, true);
+            $interest_repayment = Utils::format(($this->harmonized_interest_rate/$total_installments/100) * $balance, true);
 
             if ($i != $total_installments) {
 
@@ -285,7 +289,7 @@ final class ScheduleGenerator extends  Loan {
                         $total_amount_repayment -= $principal_repayment;
                         $principal_repayment = 0;
                     } else {
-                        $total_amount_repayment = Utils::format($this->principal / Utils::discountingFactor($this->harmonized_interest_rate, ($total_installments - $this->grace_on_principal_repayment)), true);
+                        $total_amount_repayment = Utils::format($this->principal / Utils::discountingFactor($this->harmonized_interest_rate/$total_installments, ($total_installments - $this->grace_on_principal_repayment)), true);
                     }
                 }
 

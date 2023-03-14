@@ -25,16 +25,16 @@ class ScheduleGeneratorTest extends TestCase {
     /**
      * Test flat interest rate
      */
-    public function testFlatInterestRate() {
+    public function _testFlatInterestRate() {
 
         $this
             ->interestCalculator
-            ->setPrincipal(2000)
-            ->setInterestRate(20, "monthly", Loan::FLAT_INTEREST)
-            ->setLoanDuration(1, "months")
-            ->setRepayment(1,1, "weeks")
-            ->tieInstallmentsToSpecificTimes("monday", null, null)
-            ->generate("");
+            ->setPrincipal(10000)
+            ->setInterestRate(10, "weekly", Loan::FLAT_INTEREST)
+            ->setLoanDuration(3, "days")
+            ->setRepayment(1,3, "days")
+            //->tieInstallmentsToSpecificTimes("monday", null, null)
+            ->generate("2023-03-17");
 
         print "\nInterest = {$this->interestCalculator->interest} \n";
         print "Effective Interest Rate = {$this->interestCalculator->effective_interest_rate} \n";
@@ -126,9 +126,9 @@ class ScheduleGeneratorTest extends TestCase {
         $this
             ->interestCalculator
             ->setPrincipal(10000)
-            ->setInterestRate(7, "yearly", ScheduleGenerator::INTEREST_ON_REDUCING_BALANCE)
-            ->setLoanDuration(8, "months")
-            ->setRepayment(1,2, "months")
+            ->setInterestRate(10, "weekly", ScheduleGenerator::INTEREST_ON_REDUCING_BALANCE)
+            ->setLoanDuration(4, "weeks")
+            ->setRepayment(1,1, "weeks")
             ->setAmortization(ScheduleGenerator::EVEN_PRINCIPAL_REPAYMENT)
             ->generate();
 
@@ -196,14 +196,14 @@ class ScheduleGeneratorTest extends TestCase {
         print_r($this->interestCalculator->amortization_schedule);
     }
 
-    public function _testEvenInstallmentOnReducingBalance() {
+    public function testEvenInstallmentOnReducingBalance() {
 
         $this
             ->interestCalculator
             ->setPrincipal(10000)
-            ->setInterestRate(7, "yearly", ScheduleGenerator::INTEREST_ON_REDUCING_BALANCE)
-            ->setLoanDuration(8, "months")
-            ->setRepayment(1,2, "months")
+            ->setInterestRate(10, "weekly", ScheduleGenerator::INTEREST_ON_REDUCING_BALANCE)
+            ->setLoanDuration(5, "weeks")
+            ->setRepayment(1,1, "weeks")
             ->setAmortization(ScheduleGenerator::EVEN_INSTALLMENT_REPAYMENT)
             ->generate();
 

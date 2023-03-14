@@ -211,6 +211,33 @@ final class Utils extends  Loan {
     }
 
     /**
+     * @param $value
+     * @param $frequencyType
+     * @param $loanDuration
+     * @param $loanDurationFrequencyType
+     * @return float|int
+     */
+    public static function getTotalInterestRate($value, $frequencyType, $loanDuration, $loanDurationFrequencyType) {
+        if ($frequencyType == "yearly") {
+            $durationInYears = ceil(self::convertDurationToYears($loanDuration, $loanDurationFrequencyType));
+            return $value * $durationInYears;
+        }
+        if ($frequencyType == "monthly") {
+            $durationInMonths = ceil(self::convertDurationToMonths($loanDuration, $loanDurationFrequencyType));
+            return $value * $durationInMonths;
+        }
+        if ($frequencyType == "weekly") {
+            $durationInWeeks = ceil(self::convertDurationToWeeks($loanDuration, $loanDurationFrequencyType));
+            return $value * $durationInWeeks;
+        }
+        if ($frequencyType == 'daily') {
+            $durationInDays = ceil(self::convertDurationToDays($loanDuration, $loanDurationFrequencyType));
+            return $value * $durationInDays;
+        }
+        return 0;
+    }
+
+    /**
      * Format monetary values
      * @param $value
      * @return float
