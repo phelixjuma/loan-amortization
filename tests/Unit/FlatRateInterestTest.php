@@ -32,8 +32,8 @@ class ScheduleGeneratorTest extends TestCase {
             ->setPrincipal(10000)
             ->setInterestRate(30, "monthly", Loan::FLAT_INTEREST)
             ->setLoanDuration(1, "months")
-            ->setRepayment(1,7, "days")
-            //->tieInstallmentsToSpecificTimes("monday", null, null)
+            ->setRepayment(1,1, "weeks")
+            ->tieInstallmentsToSpecificTimes("tuesday", null, null)
             ->generate("");
 
         print "\nInterest = {$this->interestCalculator->interest} \n";
@@ -77,11 +77,11 @@ class ScheduleGeneratorTest extends TestCase {
 
         $this
             ->interestCalculator
-            ->setPrincipal(10000)
-            ->setInterestRate(7, "yearly", ScheduleGenerator::FLAT_INTEREST)
-            ->setLoanDuration(8, "months")
-            ->setRepayment(1,2, "months")
-            ->setGraceOnInterest(1, "years", 2, "months")
+            ->setPrincipal(1000)
+            ->setInterestRate(10, "monthly", Loan::FLAT_INTEREST)
+            ->setLoanDuration(2, "months")
+            ->setRepayment(1,2, "weeks")
+            ->setGraceOnInterest(2, "months", 2, "weeks")
             ->generate();
 
         print "\nInterest = {$this->interestCalculator->interest} \n";
@@ -101,10 +101,10 @@ class ScheduleGeneratorTest extends TestCase {
 
         $this
             ->interestCalculator
-            ->setPrincipal(10000)
-            ->setInterestRate(7, "yearly", ScheduleGenerator::FLAT_INTEREST)
-            ->setLoanDuration(8, "months")
-            ->setRepayment(1,2, "months")
+            ->setPrincipal(1000)
+            ->setInterestRate(10, "monthly", ScheduleGenerator::FLAT_INTEREST)
+            ->setLoanDuration(1, "months")
+            ->setRepayment(1,1, "weeks")
             ->setGraceOnPrincipalRepayment(1)
             ->generate();
 
@@ -125,11 +125,11 @@ class ScheduleGeneratorTest extends TestCase {
 
         $this
             ->interestCalculator
-            ->setPrincipal(10000)
-            ->setInterestRate(10, "weekly", ScheduleGenerator::INTEREST_ON_REDUCING_BALANCE)
-            ->setLoanDuration(4, "weeks")
+            ->setPrincipal(1000)
+            ->setInterestRate(10, "monthly", ScheduleGenerator::INTEREST_ON_REDUCING_BALANCE)
+            ->setLoanDuration(1, "months")
             ->setRepayment(1,1, "weeks")
-            ->setAmortization(ScheduleGenerator::EVEN_PRINCIPAL_REPAYMENT)
+            ->setAmortization(Loan::EVEN_PRINCIPAL_REPAYMENT)
             ->generate();
 
         print "\nInterest = {$this->interestCalculator->interest} \n";
@@ -149,11 +149,11 @@ class ScheduleGeneratorTest extends TestCase {
 
         $this
             ->interestCalculator
-            ->setPrincipal(10000)
-            ->setInterestRate(7, "yearly", ScheduleGenerator::INTEREST_ON_REDUCING_BALANCE)
-            ->setLoanDuration(8, "months")
-            ->setRepayment(1,2, "months")
-            ->setAmortization(ScheduleGenerator::EVEN_PRINCIPAL_REPAYMENT)
+            ->setPrincipal(1000)
+            ->setInterestRate(10, "monthly", Loan::INTEREST_ON_REDUCING_BALANCE)
+            ->setLoanDuration(1, "months")
+            ->setRepayment(1,1, "weeks")
+            ->setAmortization(Loan::EVEN_PRINCIPAL_REPAYMENT)
             ->setGraceOnPrincipalRepayment(1)
             ->setGraceOnInterestRepayment(0)
             ->generate();
@@ -175,12 +175,12 @@ class ScheduleGeneratorTest extends TestCase {
 
         $this
             ->interestCalculator
-            ->setPrincipal(50000)
-            ->setInterestRate(12, "yearly", ScheduleGenerator::INTEREST_ON_REDUCING_BALANCE)
-            ->setLoanDuration(1, "weeks")
-            ->setRepayment(1,3, "days")
-            ->setAmortization(ScheduleGenerator::EVEN_PRINCIPAL_REPAYMENT)
-            ->setGraceOnInterest(2, "weeks", 5, "days")
+            ->setPrincipal(1000)
+            ->setInterestRate(10, "monthly", ScheduleGenerator::INTEREST_ON_REDUCING_BALANCE)
+            ->setLoanDuration(1, "months")
+            ->setRepayment(1,1, "weeks")
+            ->setAmortization(Loan::EVEN_PRINCIPAL_REPAYMENT)
+            ->setGraceOnInterest(2, "months", 1, "weeks")
             ->generate();
 
         print "\nInterest = {$this->interestCalculator->interest} \n";
@@ -200,11 +200,11 @@ class ScheduleGeneratorTest extends TestCase {
 
         $this
             ->interestCalculator
-            ->setPrincipal(10000)
-            ->setInterestRate(10, "weekly", ScheduleGenerator::INTEREST_ON_REDUCING_BALANCE)
-            ->setLoanDuration(5, "weeks")
+            ->setPrincipal(1000)
+            ->setInterestRate(10, "monthly", Loan::INTEREST_ON_REDUCING_BALANCE)
+            ->setLoanDuration(1, "months")
             ->setRepayment(1,1, "weeks")
-            ->setAmortization(ScheduleGenerator::EVEN_INSTALLMENT_REPAYMENT)
+            ->setAmortization(Loan::EVEN_INSTALLMENT_REPAYMENT)
             ->generate();
 
         print "\nInterest = {$this->interestCalculator->interest} \n";
@@ -224,7 +224,7 @@ class ScheduleGeneratorTest extends TestCase {
 
         $this
             ->interestCalculator
-            ->setPrincipal(10000)
+            ->setPrincipal(1000)
             ->setInterestRate(7, "yearly", ScheduleGenerator::INTEREST_ON_REDUCING_BALANCE)
             ->setLoanDuration(8, "months")
             ->setRepayment(1,2, "months")
@@ -249,12 +249,12 @@ class ScheduleGeneratorTest extends TestCase {
 
         $this
             ->interestCalculator
-            ->setPrincipal(10000)
-            ->setInterestRate(7, "yearly", ScheduleGenerator::INTEREST_ON_REDUCING_BALANCE)
-            ->setLoanDuration(8, "months")
+            ->setPrincipal(1000)
+            ->setInterestRate(10, "monthly", Loan::INTEREST_ON_REDUCING_BALANCE)
+            ->setLoanDuration(9, "months")
             ->setRepayment(1,1, "months")
-            ->setAmortization(ScheduleGenerator::EVEN_INSTALLMENT_REPAYMENT)
-            ->setGraceOnPrincipalRepayment(1)
+            ->setAmortization(Loan::EVEN_INSTALLMENT_REPAYMENT)
+            ->setGraceOnPrincipalRepayment(0)
             ->generate();
 
         print "\nInterest = {$this->interestCalculator->interest} \n";
@@ -274,10 +274,10 @@ class ScheduleGeneratorTest extends TestCase {
 
         $this
             ->interestCalculator
-            ->setPrincipal(50000)
-            ->setInterestRate(12, "yearly", ScheduleGenerator::INTEREST_ON_REDUCING_BALANCE)
-            ->setLoanDuration(1, "weeks")
-            ->setRepayment(1,3, "days")
+            ->setPrincipal(1000)
+            ->setInterestRate(10, "monthly", ScheduleGenerator::INTEREST_ON_REDUCING_BALANCE)
+            ->setLoanDuration(1, "months")
+            ->setRepayment(1,1, "weeks")
             ->setAmortization(ScheduleGenerator::EVEN_INSTALLMENT_REPAYMENT)
             ->setGraceOnInterestRepayment(1)
             ->generate();
