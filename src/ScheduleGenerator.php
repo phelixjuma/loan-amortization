@@ -411,13 +411,14 @@ final class ScheduleGenerator extends  Loan {
      * Add repayment dates to the amortization schedule
      *
      * @param string|null $firstInstallmentDate
+     * @param string|null $startDate
      * @return $this
      * @throws \Exception
      */
-    private function addRepaymentDates($firstInstallmentDate = null) {
+    private function addRepaymentDates($firstInstallmentDate = null, $startDate = null) {
 
         $firstInstallmentDate = !empty($firstInstallmentDate) ? Utils::formatDate($firstInstallmentDate, "Y-m-d") : null;
-        $startDate = date("Y-m-d", time());
+        $startDate = !empty($startDate) ? Utils::formatDate($startDate, 'Y-m-d') : date("Y-m-d", time());
 
         $interval = 0;
 
@@ -491,9 +492,10 @@ final class ScheduleGenerator extends  Loan {
      * Generate repayment schedule
      *
      * @param string|null $firstInstallmentDate The first installment date.
+     * @param string|null $startDate The start date of the loan cycle
      * @return $this
      */
-    public function generate($firstInstallmentDate = null) {
+    public function generate($firstInstallmentDate = null, $startDate = null) {
 
         $this->harmonizeParameters();
 
@@ -513,7 +515,7 @@ final class ScheduleGenerator extends  Loan {
 
         // Apply repayment dates
         try {
-            $this->addRepaymentDates($firstInstallmentDate);
+            $this->addRepaymentDates($firstInstallmentDate, $startDate);
         } catch (\Exception $e) {
             //print $e->getMessage();
         }
